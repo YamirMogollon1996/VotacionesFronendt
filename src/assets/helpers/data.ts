@@ -6,7 +6,7 @@ export interface Ivotaciones {
   apellido_materno: string,
   grado: string,
   seccion: string
-  voto?: number   
+  voto : number   
 }
 
 export const alumnos: Ivotaciones[] = [

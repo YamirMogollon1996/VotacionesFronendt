@@ -4,13 +4,9 @@ import fujomiri from "../assets/fujimori.jpg"
 import trump from "../assets/trump.jpg"
 import toledo from "../assets/toledo.jpg"
 import Textura from "../assets/PurpleTextura.jpg"
-import FormularioEncontrado from './FormularioEncontrado' 
-import type { Form } from '@base-ui/react'  
-import useContexto from '../Contexto/useContexto'
-import type { Ivotaciones } from "../assets/helpers/data"
-
-
-
+import FormularioEncontrado from './FormularioEncontrado.js'
+// import useContexto from '../Contexto/useContexto.js'
+import type { Ivotaciones } from "../assets/helpers/data.js"
 export interface Props {
     id: number,
     nombre: string,
@@ -20,9 +16,13 @@ export interface Props {
     color: string,
     totalvotos: number,
     foto?: string
-
 }
+export interface Rback_datos {
 
+    response: Boolean,
+    stado: Boolean,
+    data: Ivotaciones | string
+}
 export const candidatos: Props[] = [
     {
         id: 1,
@@ -69,55 +69,63 @@ export const candidatos: Props[] = [
     }
 
 ];
-const Votacion = () => {  
-   
-    
-    const [  resetearform , setResteoForm]  =  useState(false)
-    const formulario   = useRef(null)
-    const [estado, setuserios] = useState<Props[]>(JSON.parse(localStorage.getItem('usuario')) || candidatos as any)
-    const [UsuarioSingle, setUsuarioSingle] = useState<Props | null>(null)   
-    const {ActualizarMisdatos ,  estadoAlumnos} =  useContexto()
-  
-    const [encontrado, setencontrado] = useState<Ivotaciones>({} as Ivotaciones) 
-    const PapersDetalle = (item: any) => {
+const Votacion = () => {
 
-        setencontrado(item)
+    const [resetearform, setResteoForm] = useState(false)
+    const formulario = useRef(null)
+    const [estado, setuserios] = useState<Props[]>(JSON.parse(localStorage.getItem('usuario')) || candidatos as any)
+    const [UsuarioSingle, setUsuarioSingle] = useState<Props | null>(null)
+    // const { ActualizarMisdatos, estadoAlumnos } = useContexto()
+    const [encontrado, setencontrado] = useState<Rback_datos>({} as Rback_datos)
+
+    const PapersDetalle = (data: Ivotaciones | string, response: Boolean, stado: Boolean) => {
+        setencontrado({
+            data: data,
+            response,
+            stado
+        })
     }
 
-    const buttonDetlalle = (item: Props) => {
-
-        const VerelUsuario =  estadoAlumnos.find((item , index) => item.dni === encontrado.dni) 
-        if (!VerelUsuario) alert('error no encontrado')   
-        ActualizarMisdatos(VerelUsuario!)     
-        console.log(  VerelUsuario) 
-        if (Object.values(encontrado).length > 0    ) {
+    const buttonDetlalle = async (item: Props) => {
 
 
-            const uptalteClassList = estado.map((vot, index) => {
-                    return vot.id === item.id
-                        ? { ...vot, totalvotos: item.totalvotos += 1 }
-                        : vot
-                })
-                setuserios(uptalteClassList as Props[])
-                Swal.fire({
-                    title: `Voto para ${item.nombre}`,
-                    text: 'Do you want to continue',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                })
+        console.log(item)
+        if (encontrado.stado) {
 
-                setTimeout(() => {
-                    setencontrado({})  
-                    setResteoForm(!resetearform)               
-                }, 1500);  
-        } else {
-            Swal.fire({
-                title: `Error`,
-                text: 'Necesitas poner tu dni primero ',
-                icon: 'error',
-                confirmButtonText: 'error'
-            })
+                console.log('se encontro la data')
+            
         }
+
+
+        // if (!VerelUsuario) alert('error no encontrado')
+        // ActualizarMisdatos(VerelUsuario!)
+        // console.log(VerelUsuario)
+        // if (Object.values(encontrado).length > 0) {
+        //     const uptalteClassList = estado.map((vot, index) => {
+        //         return vot.id === item.id
+        //             ? { ...vot, totalvotos: item.totalvotos += 1 }
+        //             : vot
+        //     })
+        //     setuserios(uptalteClassList as Props[])
+        //     Swal.fire({
+        //         title: `Voto para ${item.nombre}`,
+        //         text: 'Do you want to continue',
+        //         icon: 'success',
+        //         confirmButtonText: 'Cool'
+        //     })
+
+        //     setTimeout(() => {
+        //         setencontrado({})
+        //         setResteoForm(!resetearform)
+        //     }, 1500);
+        // } else {
+        //     Swal.fire({
+        //         title: `Error`,
+        //         text: 'Necesitas poner tu dni primero ',
+        //         icon: 'error',
+        //         confirmButtonText: 'error'
+        //     })
+        // }
 
 
     }
@@ -133,25 +141,24 @@ const Votacion = () => {
             background: '#fafafa'
         })
     }
-
-
     useEffect(() => {
         const encontrarGanador = estado.find((item, index) => item.totalvotos === 3)
-        localStorage.setItem('usuario', JSON.stringify(estado))   
+        localStorage.setItem('usuario', JSON.stringify(estado))
 
 
     }, [estado])
+
+
     return (
         <div style={{
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover'
         }} >
             <FormularioEncontrado
-            
-                 resetearform={resetearform}
+                resetearform={resetearform}
                 PapersDetalle={PapersDetalle}
             ></FormularioEncontrado>
-
+            <p>{JSON.stringify(encontrado)}</p>
             <>
                 <div className='  grid   grid-cols-1  md:grid-cols-2 lg:grid-cols-4 min-h-screen  justify-center items-center   place-items-center gap-3.5 w-[90vw] mx-auto'>
                     {
@@ -169,7 +176,7 @@ const Votacion = () => {
                                     onClick={() => buttonDetlalle(item)} className={` 
                               hover:scale-105 
                             box border h-[80vh]   *:
-                        ${Object.values(encontrado).length === 0 ? "blur-xs grayscale" : ""}
+                        ${!encontrado.response ? "blur-xs grayscale" : ""}
                             w-full cursor-pointer rounded-md  relative ${index === 3 ? "text-black" : "text-white"}  text-3xl flex justify-center   flex-col items-center   hover:bg-[${item.color}] duration-300 first-letter:not-even:
                             `}>
 
