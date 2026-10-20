@@ -7,7 +7,7 @@ import Textura from "../assets/PurpleTextura.jpg"
 import FormularioEncontrado from './FormularioEncontrado.js'
 import type { Ivotaciones } from "../assets/helpers/data.js"
 import votacionesIcono from "../assets/ImagenRecortada_.png"
-
+import type { Candidato } from "../assets/types/candidatosTipos.ts"
 import { User, Menu, Vote, InfoIcon, CalendarIcon, DnaIcon, CheckCircle2, User2Icon, Search, UserGroup, CircleX } from 'lucide-react'
 import votacion from "../assets/votacion.svg"
 import FondoPantalla from "../assets/fondoazul.jpg"
@@ -81,13 +81,12 @@ export const candidatos: Props[] = [
 
 ];
 const Votacion = () => {
-
     const [resetearform, setResteoForm] = useState(false)
     const formulario = useRef(null)
     const [estado, setuserios] = useState<Props[]>(JSON.parse(localStorage.getItem('usuario')) || candidatos as any)
+    const [Candidates, setCandidates] = useState<Candidato[]>([])
     const [UsuarioSingle, setUsuarioSingle] = useState<Props | null>(null)
     const [encontrado, setencontrado] = useState<Rback_datos>({} as Rback_datos)
-
     const PapersDetalle = (data: Ivotaciones, response: Boolean, stado: Boolean) => {
         setencontrado({
             data: data,
@@ -144,8 +143,6 @@ const Votacion = () => {
                 },
             })
         } else {
-
-
             console.log('first dato')
             buttonDetlalle(item)
 
@@ -157,22 +154,33 @@ const Votacion = () => {
             setuserios(candidatos)
         }
     }, [])
-    if (UsuarioSingle != null) {
+    if (UsuarioSingle != null) {  
         Swal.fire({
             title: `el Ganadro es ${UsuarioSingle.nombre}`,
             icon: "success",
             background: '#fafafa'
         })
     }
+    
     useEffect(() => {
         const encontrarGanador = estado.find((item, index) => item.totalvotos === 3)
         localStorage.setItem('usuario', JSON.stringify(estado))
-
+        fetch('https://backendvotaciones-production.up.railway.app/candidato/todos').then((data) => {
+            return data.json()
+        }).then((info) => {
+            setCandidates(info)
+        }).catch((error) => {
+            console.log(error)
+        })
 
     }, [estado])
 
+
+
     return (
         <>
+
+        {/* <p>{JSON.stringify(Candidates)}</p> */}
 
             <div
 
@@ -230,7 +238,7 @@ const Votacion = () => {
 
                         <div className=' h-[80%] bg-gray-50  w-[80%] gap-4 grid grid-cols-2 rounded-lg'>
                             {
-                                candidatos.map((item, index) => {
+                                Candidates.map((item, index) => {
                                     return <div
                                         key={index}
                                         className={`  rounded-md`}>
@@ -263,6 +271,7 @@ const Votacion = () => {
                                                             <CalendarIcon></CalendarIcon>
                                                             <span className='bloc mx-2'> {item.edad} años</span>
                                                         </div>
+                                                        <p>{item.foto}</p>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Input } from "../components/ui/input.js"
 import { Label } from "../components/ui/label.js"
-import { alumnos, Ivotaciones } from '../assets/helpers/data.js'
+import {  Ivotaciones } from '../assets/helpers/data.js'
 import { Search, X, UserRound, IdCard } from "lucide-react"
 import { Spinner } from "../components/ui/spinner.tsx"
 
@@ -96,42 +96,6 @@ const FormularioEncontrado = ({ PapersDetalle
                 dni: ''
             })
         }
-
-        // const { dni: formdatadni } = dni
-        // fetch("https://backendvotaciones-production.up.railway.app/find", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify(dni)
-        // }).then((data) => {
-        //     return data.json()
-        // }).then((info) => {
-        //     if (info.msg) {
-        //         PapersDetalle("minimo 8 digitos", false, false)
-        //     }
-        //     else if (info.error) {
-        //         setdni({
-        //             ...dni,
-        //             nombre: info.error
-        //         })
-        //         // PapersDetalle()  
-
-        //         console.log('entro al error ')
-        //         PapersDetalle(info.error, false, false)
-        //     } else {
-
-        //         let inf: Ivotaciones = info
-        //         let nombreocmpleot = `${inf.nombre}  ${inf.apellido_paterno} ${inf.apellido_materno}`
-        //         setdni({
-        //             ...dni,
-        //             nombre: nombreocmpleot
-        //         })
-        //         console.log('entro al usuario encontrado ')
-        //         PapersDetalle(info, true, true)
-        //     }
-        // }).catch((error) => {
-        //     console.log(error)
-
-        // })
     }
     const handleChanugeButton = (e: React.ChangeEvent<HTMLInputElement>) => {
         setdni({
@@ -140,21 +104,11 @@ const FormularioEncontrado = ({ PapersDetalle
         })
     }
     useEffect(() => {
-        let nuevos_datos = alumnos.map((item, index) => {
-            return {
-                ...item, voto: 0
-            }
-        })
-    }, [])
-
-    useEffect(() => {
         ResetearFormulario()
     }, [resetearform])
     return (
         <>
-
             <div className='  bg-[#fdfcfd] my-10 p-4 w-md rounded-lg    shadow-2xl relative' >
-                {/* <p>{JSON.stringify(errores)}</p> */}
                 <X color='#453BD8' className='absolute right-5' ></X>
                 <div className='flex items-center'>
                     <div className='bg-indigo-600/10 rounded-full  p-4 w-auto'>
