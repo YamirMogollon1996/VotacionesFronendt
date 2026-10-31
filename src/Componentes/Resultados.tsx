@@ -15,7 +15,7 @@ const Resultados = () => {
     const chartRef = useRef<HTMLDivElement>(null)
     const FechaDatas = async () => {
         try {
-            let primero = await fetch('https://backendvotaciones-production.up.railway.app/candidato/totalvotosNombreVoto')
+            let primero = await fetch(`${ import.meta.env.VITE_APP_BACKEND}/candidato/totalvotosNombreVoto`)
             let secundod = await primero.json()
             setTotal(secundod)
         } catch (error) {

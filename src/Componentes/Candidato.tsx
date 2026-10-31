@@ -86,7 +86,7 @@ const Candidato = () => {
 
         console.log(formData.edad)
         if (formData.foto) formDataEnviar.append('foto', formData.foto)
-        const response = await fetch('https://backendvotaciones-production.up.railway.app/candidato/create', {
+        const response = await fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/create`, {
             method: 'POST',
             body: formDataEnviar
         })

@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <ToastContainer></ToastContainer>
       <Routes>
-        <Route path='/votaciones' element={<Votacion></Votacion>} ></Route>
+        <Route path='/' element={<Votacion></Votacion>} ></Route>
         <Route path='/addcandidato' element={<Candidato></Candidato>} ></Route>
         <Route path='/Resultados' element={<Resultados></Resultados>} > </Route>
       </Routes>

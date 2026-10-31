@@ -18,6 +18,7 @@ export interface Props {
     nombre: string,
     partido: string,
     edad: number,
+    // propuestas: string[],
     color: string,
     totalvotos: number,
     foto?: string
@@ -87,19 +88,25 @@ const Votacion = () => {
     const [encontrado, setencontrado] = useState<Rback_datos>({} as Rback_datos)
     const [loading, setLoading] = useState(false)
     const [totalV, setTotalV] = useState<number>(0) 
+
+
     const PapersDetalle = (data: Ivotaciones  | string   , response: Boolean, stado: Boolean) => {
+
         if ( typeof data === 'string'){
+
             setencontrado({
                 data: '',
                 response,
                 stado
             })
+            
         }else{
             setencontrado({
                 data: data,
                 response,
                 stado
             })
+            
         }
     }
     const añadirVotoParaelCandidato = async (item: Props) => {
