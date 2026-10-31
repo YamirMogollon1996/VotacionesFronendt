@@ -25,10 +25,8 @@ const Resultados = () => {
     useEffect(() => {
         FechaDatas()
     }, [])
-
     useEffect(() => {
         if (!chartRef.current) return
-
         const chart = new ApexCharts(chartRef.current, {
             colors: ['#4f46e5'],
             chart: {
@@ -71,17 +69,13 @@ const Resultados = () => {
             stroke: { show: true, width: 1, colors: ['#ffffff'] },
             tooltip: { theme: 'light' },
         })
-
         chart.render()
         return () => chart.destroy()
     }, [total])
-
     return (
         <>
             <div className='min-h-screen flex items-center justify-center bg-slate-100'>
-
                 <div className='w-md lg:w-2xl mx-auto rounded-xl border border-slate-200 bg-white p-5 shadow-sm' ref={chartRef} />
-
             </div>
 
         </>

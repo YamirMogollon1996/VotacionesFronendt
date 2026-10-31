@@ -3,50 +3,9 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('./font/Poppins-Black.woff2') format('woff2'),
-        url('./font/Poppins-Black.woff') format('woff');
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('Poppins-BlackItalic.woff2') format('woff2'),
-        url('Poppins-BlackItalic.woff') format('woff');
-    font-weight: 900;
-    font-style: italic;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('./font/Poppins-Bold.woff2') format('woff2'),
-        url('./font/Poppins-Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('Poppins-BoldItalic.woff2') format('woff2'),
-        url('Poppins-BoldItalic.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
-}
-
-/* @font-face {
-    font-family: 'Poppins';
-    src: url('Poppins-ExtraBold.woff2') format('woff2'),
-        url('Poppins-ExtraBold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-} */
 
 @font-face {
     font-family: 'Poppins';
@@ -129,41 +88,8 @@
     font-display: swap;
 }
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('./font/Poppins-SemiBold.woff2') format('woff2'),
-        url('Poppins-SemiBold.woff') format('woff');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('Poppins-SemiBoldItalic.woff2') format('woff2'),
-        url('Poppins-SemiBoldItalic.woff') format('woff');
-    font-weight: 600;
-    font-style: italic;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Poppins';
-    src: url('./font/Poppins-Thin.woff2') format('woff2'),
-        url('./font/Poppins-Thin.woff') format('woff');
-    font-weight: 100;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Poppins';
-    src: url('Poppins-ThinItalic.woff2') format('woff2'),
-        url('Poppins-ThinItalic.woff') format('woff');
-    font-weight: 100;
-    font-style: italic;
-    font-display: swap;
-}
 
 @custom-variant dark (&:is(.dark *));
 @theme inline {
