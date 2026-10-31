@@ -5,6 +5,7 @@ export const LisTenerHtps = {
     ruta: `https://backendvotaciones-production.up.railway.app`
 }
 
+console.log(LisTenerHtps.ruta)
 export interface Face {
     nombre: string
     voto: number
