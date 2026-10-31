@@ -1,28 +1,23 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Swal from "sweetalert2"
-import fujomiri from "../assets/fujimori.jpg"
-import trump from "../assets/trump.jpg"
-import toledo from "../assets/toledo.jpg"
 import Textura from "../assets/PurpleTextura.jpg"
 import FormularioEncontrado from './FormularioEncontrado.js'
 import type { Ivotaciones } from "../assets/helpers/data.js"
 import votacionesIcono from "../assets/ImagenRecortada_.png"
 import type { Candidato } from "../assets/types/candidatosTipos.ts"
-import { User, Menu, Vote, InfoIcon, CalendarIcon, DnaIcon, CheckCircle2, User2Icon, Search, UserGroup, CircleX } from 'lucide-react'
+import {Vote, InfoIcon, CalendarIcon, CheckCircle2 ,UserGroup, CircleX } from 'lucide-react'
 import votacion from "../assets/votacion.svg"
 import FondoPantalla from "../assets/fondoazul.jpg"
 import VoteNotification from './RegisterVoto.tsx'
 import pexel from "../assets/pexel.jpg"
 import { ToastContainer, toast } from 'react-toastify'
-
+import { Spinner } from "../components/ui/spinner.tsx"
 let color = ['#4FA9A5', '#FAB60E', '#DCCCB4', '#E3E7EF']
-
 export interface Props {
     id: number,
     nombre: string,
     partido: string,
     edad: number,
-    // propuestas: string[],
     color: string,
     totalvotos: number,
     foto?: string
@@ -31,68 +26,93 @@ export interface Rback_datos {
 
     response: Boolean,
     stado: Boolean,
-    data: Ivotaciones
+    data: Ivotaciones | string
 }
-export const candidatos: Props[] = [
-    {
-        id: 1,
-        nombre: "Carlos Mendoza",
-        partido: "Partido A",
-        edad: 45,
-        // propuestas: ["Educación", "Salud", "Seguridad"],
-        color: "#97bfbb",
-        totalvotos: 0,
-        foto: fujomiri
+// export const candidatos: Props[] = [
+//     {
+//         id: 1,
+//         nombre: "Carlos Mendoza",
+//         partido: "Partido A",
+//         edad: 45,
+//         // propuestas: ["Educación", "Salud", "Seguridad"],
+//         color: "#97bfbb",
+//         totalvotos: 0,
+//         foto: fujomiri
 
 
-    },
-    {
-        id: 2,
-        nombre: "María Torres",
-        partido: "Partido B",
-        edad: 39,
-        // propuestas: ["Economía", "Empleo", "Transporte"],
-        color: "#fcba03",
-        totalvotos: 0,
-        foto: trump
-    },
-    {
-        id: 3,
-        nombre: "Luis Ramírez",
-        partido: "Partido C",
-        edad: 52,
-        // propuestas: ["Infraestructura", "Salud", "Medio ambiente"],
-        color: "#e3dbc5",
-        totalvotos: 0,
-        foto: toledo
+//     },
+//     {
+//         id: 2,
+//         nombre: "María Torres",
+//         partido: "Partido B",
+//         edad: 39,
+//         // propuestas: ["Economía", "Empleo", "Transporte"],
+//         color: "#fcba03",
+//         totalvotos: 0,
+//         foto: trump
+//     },
+//     {
+//         id: 3,
+//         nombre: "Luis Ramírez",
+//         partido: "Partido C",
+//         edad: 52,
+//         // propuestas: ["Infraestructura", "Salud", "Medio ambiente"],
+//         color: "#e3dbc5",
+//         totalvotos: 0,
+//         foto: toledo
 
-    },
+//     },
 
-    {
-        id: 4,
-        nombre: "Voto Blanco",
-        partido: "Partido C",
-        edad: 52,
-        // propuestas: ["Infraestructura", "Salud", "Medio ambiente"],
-        color: "whiteSmoke",
-        totalvotos: 0,
-        foto: votacionesIcono
-    }
+//     {
+//         id: 4,
+//         nombre: "Voto Blanco",
+//         partido: "Partido C",
+//         edad: 52,
+//         // propuestas: ["Infraestructura", "Salud", "Medio ambiente"],
+//         color: "whiteSmoke",
+//         totalvotos: 0,
+//         foto: votacionesIcono
+//     }
 
-];
+// ];
 const Votacion = () => {
     const [resetearform, setResteoForm] = useState(false)
-    const formulario = useRef(null)
-    const [estado, setuserios] = useState<Props[]>(JSON.parse(localStorage.getItem('usuario')) || candidatos as any)
-    const [Candidates, setCandidates] = useState<Candidato[]>([])
+    const formulario = useRef(null)  
+    const [estado, setUsuarios] = useState<Props[]>(() =>
+  JSON.parse(localStorage.getItem('usuario') ?? '[]')
+)
+    
+    const [Candidates, setCandidates] = useState<any[]>([])
     const [UsuarioSingle, setUsuarioSingle] = useState<Props | null>(null)
     const [encontrado, setencontrado] = useState<Rback_datos>({} as Rback_datos)
-    const PapersDetalle = (data: Ivotaciones, response: Boolean, stado: Boolean) => {
-        setencontrado({
-            data: data,
-            response,
-            stado
-        })
+    const [loading, setLoading] = useState(false)
+    const [totalV, setTotalV] = useState<number>(0) 
+    const PapersDetalle = (data: Ivotaciones  | string   , response: Boolean, stado: Boolean) => {
+        if ( typeof data === 'string'){
+            setencontrado({
+                data: '',
+                response,
+                stado
+            })
+        }else{
+            setencontrado({
+                data: data,
+                response,
+                stado
+            })
+        }
+    }
+    const añadirVotoParaelCandidato = async (item: Props) => {
+        try {
+            let primero = await fetch(`https://backendvotaciones-production.up.railway.app/candidato/actualizar/${item.id}`, {
+                method: 'GET'
+            })
+            let secondo = await primero.json()
+            console.log(secondo)
+        } catch (error) {
+            console.log(error)
+        }
+
     }
     const buttonDetlalle = async (item: Props) => {
         if (encontrado.stado) {
@@ -108,8 +128,8 @@ const Votacion = () => {
                         autoClose: 1000,
                         icon: <CheckCircle2 color='#1A7B3F'></CheckCircle2>,
                         style: {
-                            backgroundColor: "#DCFCE7", // verde claro
-                            color: "#1A7B3F",           // texto verde oscuro
+                            backgroundColor: "#DCFCE7",
+                            color: "#1A7B3F",
                         },
                     })
                 } else {
@@ -123,7 +143,7 @@ const Votacion = () => {
                     })
                 }
                 setTimeout(() => {
-                    setencontrado({})
+                    setencontrado({} as any)
                     setResteoForm(!resetearform)
                 }, 1500);
             }).catch((error) => {
@@ -131,8 +151,8 @@ const Votacion = () => {
             })
         }
     }
+    const handleClick = (item: any) => {
 
-    const handleClicj = (item: Props) => {
         if (!encontrado.data) {
             toast.error(`necesitas poner tu DNI`, {
                 autoClose: 1000,
@@ -143,59 +163,63 @@ const Votacion = () => {
                 },
             })
         } else {
-            console.log('first dato')
+
+            console.log('aca se mandara la petcion para emitir voto')
+            // console.log('first dato')
             buttonDetlalle(item)
-
+            añadirVotoParaelCandidato(item)
         }
-
     }
     useEffect(() => {
         if (!estado) {
-            setuserios(candidatos)
+            // setuserios(candidatos)
         }
     }, [])
-    if (UsuarioSingle != null) {  
+    if (UsuarioSingle != null) {
         Swal.fire({
             title: `el Ganadro es ${UsuarioSingle.nombre}`,
             icon: "success",
             background: '#fafafa'
         })
     }
-    
+
     useEffect(() => {
+        setLoading(true)
         const encontrarGanador = estado.find((item, index) => item.totalvotos === 3)
         localStorage.setItem('usuario', JSON.stringify(estado))
         fetch('https://backendvotaciones-production.up.railway.app/candidato/todos').then((data) => {
             return data.json()
         }).then((info) => {
+
             setCandidates(info)
         }).catch((error) => {
             console.log(error)
+        }).finally(() => {
+            setLoading(false)
         })
-
     }, [estado])
+    useEffect(() => {
+        fetch('https://backendvotaciones-production.up.railway.app/totalvotos')
+            .then((data) => {
+                console.log(data)
+                return data.json()
 
-
-
+            }).then((info) => {
+                const { totalvotos } = info
+                setTotalV(totalvotos)
+            }).catch((error) => {
+                console.log(error)
+            })    }, [])
     return (
         <>
-
-        {/* <p>{JSON.stringify(Candidates)}</p> */}
-
             <div
-
-
                 className='
             bg-linear-to-r from-indigo-700 via-indigo-950 to-indigo-700 ...
             min-h-screen top-0 flex items-center justify-center relative '>
-
-
                 <div className='absolute h-[50%] bg-[#4B238A] w-[25%] blur-2xl rounded-full right-10  bottom-5'></div>
                 <div className='absolute h-[50%] bg-[#4B238A] w-[25%] blur-2xl rounded-full left-10  bottom-5'></div>
                 <div className='absolute h-[50%] bg-[#4B238A] w-[25%] blur-2xl rounded-full left-10  top-5'></div>
                 <div className='absolute h-[50%] bg-[#4B238A] w-[25%] blur-2xl rounded-full right-10  top-5'></div>
-
-
                 <div className=' border-gray-200  
                 rounded-2xl w-[85vw]  mt-5 mx-auto grid grid-cols-[25%_1fr]   min-h-[90vh]'>
                     <div className='p-2   h-14 bg-linear-to-b from-[#fafafa] to-violet-800 min-h-full relative  rounded-l-md   ' >
@@ -213,7 +237,7 @@ const Votacion = () => {
                             <div className='border bg-indigo-400/10 shadow-2xl  shadow-2xl border-[#3b36ce0c] rounded-sm p-2 rounded-md  flex  mt-4'>
 
                                 <InfoIcon size={30} color='#4842D4'></InfoIcon>
-                                <p className='mx-2 text-[#4842D4]  text-xs font-semibold'>Para votart , primero debes encontrar tu registro en el formulario .</p>
+                                <p className='mx-2 text-[#4842D4]  text-xs font-semibold'>Para votar , primero debes encontrar tu registro en el formulario .</p>
                             </div>
 
                             <img className='mx-auto mt-2' height={200} width={200} src={votacion} ></img>
@@ -225,95 +249,101 @@ const Votacion = () => {
                                     PapersDetalle={PapersDetalle}
                                     resetearform={resetearform} ></FormularioEncontrado>
                             </div>
-
                         </div>
                     </div>
-                    <div className='flex items-center justify-center relative bg-[#f5f4fd] rounded-r-xl'>
-
+                    <div className='flex items-center justify-center relative bg-[#f5f4fd] rounded-r-xl '>
                         <button className='absolute top-4 right-10 border flex p-2 rounded-md bg-[#DBD8FD]  items-end justify-center'>
                             <UserGroup className='mx-2' color='#4E42DA'></UserGroup>
                             <p className='text-[#4E42DA] font-regular'>Total de votos  </p>
-                            <span className='font-bold mx-2 text-[#4E42DA]'>0</span>
+                            <span className='font-bold mx-2 text-[#4E42DA]'>{totalV}</span>
                         </button>
+                        {
+                            !loading ?
+                                <div className=' h-[80%] bg-gray-50  w-[80%] gap-4 grid grid-cols-2 rounded-lg'>
+                                    {
+                                        Candidates.map((item, index) => {
+                                            return <div
+                                                key={index}
+                                                className={`  rounded-md`}>
+                                                <div style={{
 
-                        <div className=' h-[80%] bg-gray-50  w-[80%] gap-4 grid grid-cols-2 rounded-lg'>
-                            {
-                                Candidates.map((item, index) => {
-                                    return <div
-                                        key={index}
-                                        className={`  rounded-md`}>
-                                        <div style={{
-                                            backgroundImage: `url(${item.foto})`,
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundColor: `#F5F5FA`,
-                                            backgroundSize: `${index === 3 ? 'contain' : 'cover'}`,
-                                            backgroundPosition: 'top center ',
-                                        }}
-                                            className={`rounded-md w-full  object-cover   h-[80%] relative border  `}
-                                        >
-                                            <div className={`${index != 3
-                                                ? ' absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent' : ''} 
+                                                    backgroundImage: `url(${item.foto})`,
+                                                    backgroundRepeat: 'no-repeat',
+                                                    backgroundColor: `#F5F5FA`,
+                                                    backgroundSize: `${index != 3 ? 'contain' : 'contain'}`,
+                                                    backgroundPosition: 'center'
+                                                }}
+                                                    className={`rounded-md w-full    object-cover  h-[80%] relative border  `}
+                                                >
+                                                    <div className={`${index != 6
+                                                        ? ' absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent' : ''} 
                                    
-                                }     `
-                                            }></div>
+                                }
+                                                `
 
-                                            <div className='absolute bottom-0 w-full p-6 '>
-                                                <div className='flex'>
-                                                    <div style={{
-                                                        backgroundColor: color[index]
-                                                    }} className='bg-blue-300 w-4 rounded-md'>
-                                                        <p></p>
-                                                    </div>
-                                                    <div className={`mx-4 ${index != 3 ? 'text-white' : 'text-gray-500'}   font-bold`}>
-                                                        <p>{item.nombre}</p>
-                                                        <p>{item.partido}</p>
+                                                    }></div>
+                                                    <div className='absolute bottom-0 w-full p-6 '>
                                                         <div className='flex'>
-                                                            <CalendarIcon></CalendarIcon>
-                                                            <span className='bloc mx-2'> {item.edad} años</span>
+                                                            <div style={{
+                                                                backgroundColor: color[index]
+                                                            }} className='bg-blue-300 w-4 rounded-md'>
+                                                                <p></p>
+                                                            </div>
+                                                            <div className={`mx-4 text-white ${index != 3 ? 'text-white' : 'text-gray-500'}   font-bold`}>
+                                                                <p>{item.nombre}</p>
+                                                                <p>{item.partido}</p>
+                                                                <div className='flex'>
+                                                                    <CalendarIcon></CalendarIcon>
+                                                                    <span className='bloc mx-2'> {item.anio} años</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <p>{item.foto}</p>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            style={{
-                                                borderColor: color[index]
-                                            }}
-                                            className=' h-[20%]  border-b-2   border-l-2  border-r-2 rounded-md text-center flex items-center  justify-center'>
-                                            <button
-                                                onClick={() => handleClicj(item)}
-                                                style={{
-                                                    backgroundColor: color[index]
-                                                }}
-                                                className={`
+                                                <div
+                                                    style={{
+                                                        borderColor: color[index]
+                                                    }}
+                                                    className=' h-[20%]  border-b-2   border-l-2  border-r-2 rounded-md text-center flex items-center  justify-center'>
+                                                    <button
+                                                        onClick={() => handleClick(item)}
+                                                        style={{
+                                                            backgroundColor: color[index]
+                                                        }}
+                                                        className={`
                                                     ${index > 2 && "text-black"}
                                                     cursor-pointer
                                                 w-[70%] text-white border rounded-full  
                                                 flex items-center justify-center p-3`}>
-                                                <Vote color={`${index > 1 ? 'gray' : 'white'}`} > </Vote>
-                                                <p className={`mx-2 font-bold ${index > 1 && 'text-gray-500 font-bold'}`}>Votar</p>
-
-                                            </button>
-
+                                                        <Vote color={`${index > 1 ? 'gray' : 'white'}`} > </Vote>
+                                                        <p className={`mx-2 font-bold ${index > 1 && 'text-gray-500 font-bold'}`}>Votar</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        })
+                                    }
+                                </div>
+                                : <div className='h-[80%] w-[80%] gap-4 grid grid-cols-2 rounded-lg animate-pulse'>
+                                    {Array.from({ length: 4 }).map((_, index) => (
+                                        <div key={index} className='rounded-md'>
+                                            <div className='h-[80%] w-full rounded-md border bg-gray-200 relative'>
+                                                <div className='absolute bottom-0 w-full p-6 space-y-2'>
+                                                    <div className='h-4 w-3/4 rounded bg-gray-300'></div>
+                                                    <div className='h-3 w-1/2 rounded bg-gray-300'></div>
+                                                    <div className='h-3 w-1/3 rounded bg-gray-300'></div>
+                                                </div>
+                                            </div>
+                                            <div className='h-[20%] rounded-md border-b-2 border-l-2 border-r-2 flex items-center justify-center'>
+                                                <div className='h-10 w-[70%] rounded-full bg-gray-300'></div>
+                                            </div>
                                         </div>
-
-                                    </div>
-                                })
-                            }
-
-                        </div>
-
-
-
+                                    ))}
+                                </div>
+                        }
                     </div>
-
                 </div>
-
             </div>
-
         </>
-
     )
 }
 

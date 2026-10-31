@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Input } from "../components/ui/input.js"
-import { Label } from "../components/ui/label.js"
-import {  Ivotaciones } from '../assets/helpers/data.js'
-import { Search, X, UserRound, IdCard } from "lucide-react"
+import { Ivotaciones } from '../assets/helpers/data.js'
+import { Search, UserRound, IdCard } from "lucide-react"
 import { Spinner } from "../components/ui/spinner.tsx"
 
 
@@ -12,7 +11,7 @@ interface PropsFrom {
 }
 interface PropsFunciton {
     resetearform: Boolean
-    PapersDetalle: (item: Ivotaciones, response: Boolean, stado: Boolean) => void
+    PapersDetalle: (item: Ivotaciones  | string, response: Boolean, stado: Boolean) => void
 }
 const initalStado: PropsFrom = {
     dni: '',
@@ -29,11 +28,9 @@ const FormularioEncontrado = ({ PapersDetalle
     const FormluarioEfecto = useRef<HTMLFormElement>(null)
     const [errores, setErrores] = useState(intialError)
     const [loading, setloading] = useState<Boolean>(false)
-
-
-    const handleChangue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.name, e.target.value)
-    }
+    // const handleChangue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     console.log(e.target.name, e.target.value)
+    // }
     const ResetearFormulario = () => {
         FormluarioEfecto.current?.reset()
         setdni(initalStado)
@@ -43,7 +40,6 @@ const FormularioEncontrado = ({ PapersDetalle
         e.preventDefault()
         setloading(true)
         console.log('Buscar datos')
-        const { dni: formdatadni } = dni
         fetch("https://backendvotaciones-production.up.railway.app/find", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -109,7 +105,7 @@ const FormularioEncontrado = ({ PapersDetalle
     return (
         <>
             <div className='  bg-[#fdfcfd] my-10 p-4 w-md rounded-lg    shadow-2xl relative' >
-                <X color='#453BD8' className='absolute right-5' ></X>
+                {/* <X color='#453BD8' className='absolute right-5' ></X> */}
                 <div className='flex items-center'>
                     <div className='bg-indigo-600/10 rounded-full  p-4 w-auto'>
                         <Search
@@ -136,7 +132,7 @@ const FormularioEncontrado = ({ PapersDetalle
                             type="text"
                             placeholder='DNI' name='dni'
                             className={`
-                                pl-10 text-gray-500  ${ errores.dni != '' ? 'border-2 border-red-500' :'border' } 
+                                pl-10 text-gray-500  ${errores.dni != '' ? 'border-2 border-red-500' : 'border'} 
                                 `} // padding extra para que no se solape con el ícono
                         />
                         <span className='text-red-600 pt-4' >{errores.dni}</span>

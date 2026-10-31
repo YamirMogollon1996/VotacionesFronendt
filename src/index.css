@@ -165,10 +165,7 @@
     font-display: swap;
 }
 
-
-
 @custom-variant dark (&:is(.dark *));
-
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Poppins';

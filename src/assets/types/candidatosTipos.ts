@@ -7,5 +7,6 @@ export interface Candidato {
   voto: number;
   activo: boolean;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string; 
+  anio :  number
 }
