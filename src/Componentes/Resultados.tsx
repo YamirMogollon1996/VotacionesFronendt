@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import ApexCharts from "apexcharts"
 
 
-console.log(LisTenerHtps.ruta)
 export interface Face {
     nombre: string
     voto: number
@@ -12,7 +11,7 @@ const Resultados = () => {
     const chartRef = useRef<HTMLDivElement>(null)
     const FechaDatas = async () => {
         try {
-            let primero = await fetch(`${ import.meta.env.VITE_APP_BACKEND}/candidato/totalvotosNombreVoto`)
+            let primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/totalvotosNombreVoto`)
             let secundod = await primero.json()
             setTotal(secundod)
         } catch (error) {
