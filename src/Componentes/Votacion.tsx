@@ -109,9 +109,11 @@ const Votacion = () => {
             
         }
     }
+
+    // https://backendvotaciones-production.up.railway.app/candidato/actualizar/${item.id}
     const añadirVotoParaelCandidato = async (item: Props) => {
         try {
-            let primero = await fetch(`https://backendvotaciones-production.up.railway.app/candidato/actualizar/${item.id}`, {
+            let primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/actualizar/${item.id}`, {
                 method: 'GET'
             })
             let secondo = await primero.json()
@@ -119,11 +121,10 @@ const Votacion = () => {
         } catch (error) {
             console.log(error)
         }
-
     }
     const buttonDetlalle = async (item: Props) => {
         if (encontrado.stado) {
-            fetch('https://backendvotaciones-production.up.railway.app/addVoto', {
+            fetch(`${import.meta.env.VITE_APP_BACKEND}/addVoto`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(encontrado.data)

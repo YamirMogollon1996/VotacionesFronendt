@@ -39,8 +39,9 @@ const FormularioEncontrado = ({ PapersDetalle
     const hanldeSubmitEeventForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setloading(true)
-        console.log('Buscar datos')
-        fetch("https://backendvotaciones-production.up.railway.app/find", {
+        console.log('Buscar datos')  
+        console.log( import.meta.env.VITE_APP_BACKEND)
+        fetch(`${ import.meta.env.VITE_APP_BACKEND }/find`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dni)
