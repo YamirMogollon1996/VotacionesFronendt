@@ -75,7 +75,7 @@ const Candidato = () => {
 
    
         console.log(formData)
-        let variab = formData.activo ? 1 : 0
+        const variab = formData.activo ? 1 : 0
         const formDataEnviar = new FormData()
         formDataEnviar.append('nombre', formData.nombre.trim())
         formDataEnviar.append('apellido', formData.apellido.trim())

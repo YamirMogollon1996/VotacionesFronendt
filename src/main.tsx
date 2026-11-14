@@ -7,8 +7,7 @@ import Votacion from './Componentes/Votacion.tsx'
 import { ToastContainer } from 'react-toastify'
 import Candidato from './Componentes/Candidato.tsx'
 import Resultados from './Componentes/Resultados.tsx'     
-import NotfFoundErro from './Componentes/NotfFoundErro.tsx'
-
+import NotfFoundErro from './Componentes/NotfFoundErro.tsx' 
 createRoot(document.getElementById('root')!).render(  
   <StrictMode>
     <BrowserRouter>
