@@ -5,7 +5,7 @@ import FormularioEncontrado from './FormularioEncontrado.js'
 import type { Ivotaciones } from "../assets/helpers/data.js"
 import votacionesIcono from "../assets/ImagenRecortada_.png"
 import type { Candidato } from "../assets/types/candidatosTipos.ts"
-import {Vote, InfoIcon, CalendarIcon, CheckCircle2 ,UserGroup, CircleX } from 'lucide-react'
+import { Vote, InfoIcon, CalendarIcon, CheckCircle2, UserGroup, CircleX } from 'lucide-react'
 import votacion from "../assets/votacion.svg"
 import FondoPantalla from "../assets/fondoazul.jpg"
 import VoteNotification from './RegisterVoto.tsx'
@@ -78,39 +78,33 @@ export interface Rback_datos {
 // ];
 const Votacion = () => {
     const [resetearform, setResteoForm] = useState(false)
-    const formulario = useRef(null)  
+    const formulario = useRef(null)
     const [estado, setUsuarios] = useState<Props[]>(() =>
-  JSON.parse(localStorage.getItem('usuario') ?? '[]')
-)
-    
+        JSON.parse(localStorage.getItem('usuario') ?? '[]')
+    )
     const [Candidates, setCandidates] = useState<any[]>([])
     const [UsuarioSingle, setUsuarioSingle] = useState<Props | null>(null)
     const [encontrado, setencontrado] = useState<Rback_datos>({} as Rback_datos)
     const [loading, setLoading] = useState(false)
-    const [totalV, setTotalV] = useState<number>(0) 
-
-
-    const PapersDetalle = (data: Ivotaciones  | string   , response: Boolean, stado: Boolean) => {
-
-        if ( typeof data === 'string'){
-
+    const [totalV, setTotalV] = useState<number>(0)
+    const PapersDetalle = (data: Ivotaciones | string, response: Boolean, stado: Boolean) => {
+        if (typeof data === 'string') {
             setencontrado({
                 data: '',
                 response,
                 stado
             })
-            
-        }else{
+        } else {
             setencontrado({
                 data: data,
                 response,
                 stado
             })
-            
+
         }
     }
 
-    // https://backendvotaciones-production.up.railway.app/candidato/actualizar/${item.id}
+
     const añadirVotoParaelCandidato = async (item: Props) => {
         try {
             let primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/actualizar/${item.id}`, {
@@ -195,7 +189,7 @@ const Votacion = () => {
         setLoading(true)
         const encontrarGanador = estado.find((item, index) => item.totalvotos === 3)
         localStorage.setItem('usuario', JSON.stringify(estado))
-        fetch('https://backendvotaciones-production.up.railway.app/candidato/todos').then((data) => {
+        fetch(`${import.meta.env.VITE_APP_BACKEND}/todos`).then((data) => {
             return data.json()
         }).then((info) => {
 
@@ -207,7 +201,7 @@ const Votacion = () => {
         })
     }, [estado])
     useEffect(() => {
-        fetch('https://backendvotaciones-production.up.railway.app/totalvotos')
+        fetch(`${import.meta.env.VITE_APP_BACKEND}/totalvotos`)
             .then((data) => {
                 console.log(data)
                 return data.json()
@@ -217,7 +211,8 @@ const Votacion = () => {
                 setTotalV(totalvotos)
             }).catch((error) => {
                 console.log(error)
-            })    }, [])
+            })
+    }, [])
     return (
         <>
             <div
