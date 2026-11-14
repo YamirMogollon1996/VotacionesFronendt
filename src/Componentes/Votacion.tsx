@@ -184,12 +184,13 @@ const Votacion = () => {
             background: '#fafafa'
         })
     }
-
     useEffect(() => {
         setLoading(true)
         const encontrarGanador = estado.find((item, index) => item.totalvotos === 3)
         localStorage.setItem('usuario', JSON.stringify(estado))
-        fetch(`${import.meta.env.VITE_APP_BACKEND}/todos`).then((data) => {
+        fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/todos`).then((data) => { 
+
+            console.log(data)
             return data.json()
         }).then((info) => {
 
