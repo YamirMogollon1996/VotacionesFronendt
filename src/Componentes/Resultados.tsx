@@ -7,19 +7,23 @@ export interface Face {
     voto: number
 }
 const Resultados = () => {
+
+    console.log('sfsdf')
     const [total, setTotal] = useState<Face[]>([])
     const chartRef = useRef<HTMLDivElement>(null)
     const FechaDatas = async () => {
         try {
-            let primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/totalvotosNombreVoto`)
+            let primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/totalvotosNombreVoto`)   
             let secundod = await primero.json()
+            console.log( secundod)
             setTotal(secundod)
         } catch (error) {
             return error
         }
     }
     useEffect(() => {
-        FechaDatas()
+        FechaDatas()  
+       
     }, [])
     useEffect(() => {
         if (!chartRef.current) return
@@ -65,11 +69,13 @@ const Resultados = () => {
             stroke: { show: true, width: 1, colors: ['#ffffff'] },
             tooltip: { theme: 'light' },
         })
-        chart.render()
+        chart.render()    
         return () => chart.destroy()
     }, [total])
     return (
         <>
+
+            {/* <p>Hola mudo</p> */}
             <div className='min-h-screen flex items-center justify-center bg-slate-100'>
                 <div className='w-md lg:w-2xl mx-auto rounded-xl border border-slate-200 bg-white p-5 shadow-sm' ref={chartRef} />
             </div>

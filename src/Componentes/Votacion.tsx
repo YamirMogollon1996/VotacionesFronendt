@@ -100,22 +100,20 @@ const Votacion = () => {
                 response,
                 stado
             })
-
         }
     }
-
-
     const añadirVotoParaelCandidato = async (item: Props) => {
         try {
-            let primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/actualizar/${item.id}`, {
-                method: 'GET'
-            })
-            let secondo = await primero.json()
+            console.log(item)
+            const primero = await fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/actualizar/${item.id}`)
+            const secondo = await primero.json()
             console.log(secondo)
         } catch (error) {
             console.log(error)
         }
     }
+
+
     const buttonDetlalle = async (item: Props) => {
         if (encontrado.stado) {
             fetch(`${import.meta.env.VITE_APP_BACKEND}/addVoto`, {
@@ -188,7 +186,7 @@ const Votacion = () => {
         setLoading(true)
         const encontrarGanador = estado.find((item, index) => item.totalvotos === 3)
         localStorage.setItem('usuario', JSON.stringify(estado))
-        fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/todos`).then((data) => { 
+        fetch(`${import.meta.env.VITE_APP_BACKEND}/candidato/todos`).then((data) => {
 
             console.log(data)
             return data.json()

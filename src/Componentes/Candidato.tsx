@@ -29,8 +29,6 @@ const Detalle_Datos: CandidatoFormData = {
 
 
 const Candidato = () => {
-
-
     const [formData, setFormData] = useState<CandidatoFormData>(Detalle_Datos)
     const [errors, setErrors] = useState<Partial<Record<keyof CandidatoFormData, string>>>({})
     const [claveCorrecta, setClaveCorrecta] = useState(false)
