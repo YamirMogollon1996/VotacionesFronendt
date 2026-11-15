@@ -63,7 +63,7 @@ const Resultados = () => {
                 bar: {
                     horizontal: false,
                     borderRadius: 6,
-                    columnWidth: '50%',
+                    columnWidth: '20%',
                 },
             },
             stroke: { show: true, width: 1, colors: ['#ffffff'] },
