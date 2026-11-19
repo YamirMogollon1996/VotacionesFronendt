@@ -12,7 +12,8 @@ import VoteNotification from './RegisterVoto.tsx'
 import pexel from "../assets/pexel.jpg"
 import { ToastContainer, toast } from 'react-toastify'
 import { Spinner } from "../components/ui/spinner.tsx"
-let color = ['#4FA9A5', '#FAB60E', '#DCCCB4', '#E3E7EF']
+const color = ['#4FA9A5', '#FAB60E', '#DCCCB4', '#E3E7EF']
+
 export interface Props {
     id: number,
     nombre: string,
@@ -29,7 +30,6 @@ export interface Rback_datos {
     stado: Boolean,
     data: Ivotaciones | string
 }
-// export const candidatos: Props[] = [
 //     {
 //         id: 1,
 //         nombre: "Carlos Mendoza",
@@ -199,6 +199,8 @@ const Votacion = () => {
             setLoading(false)
         })
     }, [estado])
+
+    
     useEffect(() => {
         fetch(`${import.meta.env.VITE_APP_BACKEND}/totalvotos`)
             .then((data) => {
@@ -254,11 +256,11 @@ const Votacion = () => {
                         </div>
                     </div>
                     <div className='flex items-center justify-center relative bg-[#f5f4fd] rounded-r-xl '>
-                        <button className='absolute top-4 right-10 border flex p-2 rounded-md bg-[#DBD8FD]  items-end justify-center'>
+                        {/* <button className='absolute top-4 right-10 border flex p-2 rounded-md bg-[#DBD8FD]  items-end justify-center'>
                             <UserGroup className='mx-2' color='#4E42DA'></UserGroup>
                             <p className='text-[#4E42DA] font-regular'>Total de votos  </p>
                             <span className='font-bold mx-2 text-[#4E42DA]'>{totalV}</span>
-                        </button>
+                        </button> */}
                         {
                             !loading ?
                                 <div className=' h-[80%] bg-gray-50  w-[80%] gap-4 grid grid-cols-2 rounded-lg'>
@@ -272,7 +274,7 @@ const Votacion = () => {
                                                     backgroundImage: `url(${item.foto})`,
                                                     backgroundRepeat: 'no-repeat',
                                                     backgroundColor: `#F5F5FA`,
-                                                    backgroundSize: `${index != 3 ? 'contain' : 'contain'}`,
+                                                    backgroundSize: `contain`,
                                                     backgroundPosition: 'center'
                                                 }}
                                                     className={`rounded-md w-full    object-cover  h-[80%] relative border  `}
